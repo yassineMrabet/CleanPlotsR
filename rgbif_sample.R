@@ -95,5 +95,5 @@ gg <- gg + theme_map()
 # Display the result 
 gg
 
-india <- map_data("india")
+#india <- map_data("india")
 
