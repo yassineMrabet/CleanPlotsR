@@ -1,2 +1,2 @@
 # CleanPlotsR
-Collection of clean graphs ready for publication
+My own collection of clean R graphs (maps, visualizations, ..) ready for publication.
