@@ -41,7 +41,7 @@ out <- out[! is.na(out$name),]
 
 # I introduced additional coordinates collected from
 # literature and personal observations
-# Check the joined csv. file 
+# Check the joined csv. file
 p.add <- read.csv("~/Documents/additional_list.csv",header = TRUE)
 out <- as.data.frame(rbind(out,p.add[,c(1:4)])) 
 # melia.points <- subset(out, name = 'Melia azedarach' )
