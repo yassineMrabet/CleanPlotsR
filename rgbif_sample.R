@@ -28,6 +28,9 @@ sp.list <- occ_data(scientificName = c('Melia', 'Azadirachta'),
 
 # Get only the name, key and coordiantes columns
 melia.data <- sp.list$Melia$data[,c(1:4)]
+# M. volkensii points were overlayed in the map, I decided to
+# plot them afterward
+melia.volk <- subset(melia.data, name == 'Melia volkensii')
 azad.data <- sp.list$Azadirachta$data[,c(1:4)]
 
 
@@ -41,10 +44,10 @@ out <- out[! is.na(out$name),]
 # Check the joined csv. file 
 p.add <- read.csv("~/Documents/additional_list.csv",header = TRUE)
 out <- as.data.frame(rbind(out,p.add[,c(1:4)])) 
+# melia.points <- subset(out, name = 'Melia azedarach' )
 
 # Examine the number of records 
 table(out$name)
-
 
 # General ggplot2 theme for map
 # Source: https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/
@@ -62,11 +65,11 @@ theme_map <- function(...) {
       # panel.grid.minor = element_line(color = "#ebebe5", size = 0.2),
       panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
       panel.grid.minor = element_blank(),
-      plot.background = element_rect(fill = "#f8f4f1", color = NA), 
-      panel.background = element_rect(fill = "#f8f4f1", color = NA), 
+      plot.background = element_rect(fill = "#fff2ebff", color = NA), 
+      panel.background = element_rect(fill = "#fff2ebff", color = NA), 
       legend.position="bottom",
       legend.text = element_text(face = "italic"),
-      legend.background = element_rect(fill = "#f5f5f2", color = NA),
+      legend.background = element_rect(fill = "#fff2ebff", color = NA),
       panel.border = element_blank(),
       ...
     )
@@ -76,18 +79,46 @@ theme_map <- function(...) {
 # Creating the map
 world <- map_data("world")
 
-# Setting the native range (TODO)
-# india <- subset(world, region == "India")
-
+# Setting the native range (Indomalayan realm)
+native_range <- subset(world, region == "India" |
+                         region == "Bangladesh" |
+                         region == "Myanmar" |
+                         region == "Nepal" |
+                         region == "Malaysia" |
+                         region == "Laos" |
+                         region =="Indonesia" |
+                         region =="Java" | 
+                         region =="Bali" |
+                         region =="Cambodia" |  
+                         region =="Vietnam" |  
+                         region =="Sumatra" |  
+                         region =="Thailand" |
+                         region =="Java" |  
+                         region =="Vietnam" |  
+                         region =="Borneo")
 
 gg <- ggplot(world, aes(long, lat)) +
       #World polygon
       geom_polygon(aes(group = group), fill = "white", 
-               color = "gray40", size = .2) +
-      geom_point(data = out,
-              aes(x=decimalLongitude, y=decimalLatitude, colour=name), alpha=0.6, 
-              size = 1)
-gg <- gg + labs(color = "Species")
+               color = "gray40", size = .2)
+gg <- gg + geom_polygon(data=native_range, aes(long, lat, group =group), 
+                        fill = "#c4ac86ff" , 
+                        color = "#c4ac86ff") +
+      coord_quickmap()
+
+gg <- gg + geom_point(data = out,
+                      aes(x=decimalLongitude, y=decimalLatitude, colour=name, shape=name), 
+                      #alpha=0.5, 
+                      size = 1.5)
+
+gg <- gg + geom_point(data = melia.volk ,
+                      aes(x=decimalLongitude, y=decimalLatitude, colour=name, shape=name), 
+                      #alpha=0.5, 
+                      size = 1.5)
+
+# gg <- gg + geom_density2d(data = melia.points, aes(x = decimalLongitude, y = decimalLatitude), size = 0.3)
+
+gg <- gg + labs(color = "Species", shape="Species")
 gg <- gg + scale_color_brewer(palette="Set1")
 gg <- gg + theme_map()
 
@@ -95,5 +126,5 @@ gg <- gg + theme_map()
 # Display the result 
 gg
 
-#india <- map_data("india")
+
 
