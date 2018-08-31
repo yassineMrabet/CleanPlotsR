@@ -1,4 +1,4 @@
-References list for the additional points [csv] (/yassineMrabet/CleanPlotsR/blob/Maps/Data/additional_list.csv)
+References list for the additional points [csv] (CleanPlotsR/Maps/Data/additional_list.csv)
 
 [1] Mosul, Irak : Abdelmanaa K. S. A., Aljalabi N. S. [iasj (https://www.iasj.net/iasj?func=fulltext&aId=58935) (2011) [Arabic]
 
